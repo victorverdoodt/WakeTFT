@@ -6,11 +6,37 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using static WakeTFT.D3DXMath;
 
 namespace WakeTFT
 {
     public class Utility
     {
+        public static D3DXVECTOR2 WorldToScreen(D3DXVECTOR3 objLoc, D3DXVECTOR2 screenRes, D3DXMATRIX vpMatrix)
+        {
+            D3DXVECTOR2 returnVec = new D3DXVECTOR2();
+
+            D3DXVECTOR4 clipCoords = new D3DXVECTOR4();
+            clipCoords.x = objLoc.x * vpMatrix._11 + objLoc.y * vpMatrix._21 + objLoc.z * vpMatrix._31 + vpMatrix._41;
+            clipCoords.y = objLoc.x * vpMatrix._12 + objLoc.y * vpMatrix._22 + objLoc.z * vpMatrix._32 + vpMatrix._42;
+            clipCoords.z = objLoc.x * vpMatrix._13 + objLoc.y * vpMatrix._23 + objLoc.z * vpMatrix._33 + vpMatrix._43;
+            clipCoords.w = objLoc.x * vpMatrix._14 + objLoc.y * vpMatrix._24 + objLoc.z * vpMatrix._34 + vpMatrix._44;
+
+            if (clipCoords.w < 0.1f)
+            {
+                return returnVec;
+            }
+
+            D3DXVECTOR3 M = new D3DXVECTOR3();
+            M.x = clipCoords.x / clipCoords.w;
+            M.y = clipCoords.y / clipCoords.w;
+            M.z = clipCoords.z / clipCoords.w;
+
+            returnVec.x = (screenRes.x / 2 * M.x) + (M.x + screenRes.x / 2);
+            returnVec.y = -(screenRes.y / 2 * M.y) + (M.y + screenRes.y / 2);
+
+            return returnVec;
+        }
 
         public static bool IsOpen
         {

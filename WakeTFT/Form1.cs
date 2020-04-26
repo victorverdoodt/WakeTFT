@@ -21,18 +21,10 @@ namespace WakeTFT
         public static UInt32 testi;
         private void Form1_Load(object sender, EventArgs e)
         {
-            
             new Thread(() =>
             {
                 Thread.CurrentThread.IsBackground = true;
-                Engine engine = new Engine();
-                engine.Run();
-            }).Start();
-
-            new Thread(() =>
-            {
-                Thread.CurrentThread.IsBackground = true;
-                Visuals v = new Visuals();
+                Engine v = new Engine();
                 v.Run();
             }).Start();
         }

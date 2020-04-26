@@ -127,7 +127,7 @@ namespace WakeTFT
             return 0;
         }
 
-        UInt32 read_memory(UInt32 process_id, UInt64 address, UIntPtr buffer, UInt32 size)
+        public UInt32 read_memory(UInt32 process_id, UInt64 address, UIntPtr buffer, UInt32 size)
         {
             return copy_memory(process_id, address, (UInt32)Process.GetCurrentProcess().Id, buffer, size);
         }
